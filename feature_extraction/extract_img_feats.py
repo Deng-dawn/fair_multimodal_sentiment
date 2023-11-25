@@ -59,10 +59,10 @@ def get_resnet_feats():
     model.eval().to(device)
 
     model._modules.get('avgpool').register_forward_hook(feature_hook)
-
+    print("generate dataset...\n")
     dataset = MMDataset(dloc, img_transforms, txt_transform, txt_processor)
     dt_loader = DataLoader(dataset, batch_size=128, sampler=SequentialSampler(dataset))
-
+    print("apply pre-trained model to extract features...\n")
     for i, batch in enumerate(dt_loader):
         print(i)
 
@@ -105,11 +105,13 @@ def get_clip_feats():
 
 
 dloc = 'data/mvsa_%s/'%(args.mvsa)
+print(dloc)
 
 if args.vtype != 'clip':
     feats, logits = get_resnet_feats()
     print(np.array(feats).shape, np.array(logits).shape)
-    json.dump({'feats': feats, 'logits': logits}, open('features/%s_%s.json'%(args.vtype,args.mvsa), 'w'))
+    # json.dump({'feats': feats, 'logits': logits}, open('features/%s_%s.json'%(args.vtype,args.mvsa), 'w'))
+    json.dump({'feats': feats, 'logits': logits}, open('features/test_%s_%s.json' % (args.vtype, args.mvsa), 'w'))
 else:
     img_feats, text_feats = get_clip_feats()
     print(np.array(img_feats).shape, np.array(text_feats).shape)

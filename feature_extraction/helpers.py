@@ -16,7 +16,8 @@ from ekphrasis.dicts.emoticons import emoticons
 
 class MMDataset(Dataset):
     def __init__(self, dloc, img_transform=None, txt_transform=None, txt_processor=None):
-        self.file_names = pd.read_csv(os.path.join(dloc,'valid_pairlist.txt'), header=None)
+        # self.file_names = pd.read_csv(os.path.join(dloc,'valid_pairlist.txt'), header=None)
+        self.file_names = pd.read_csv(os.path.join(dloc, 'test_pairlist.txt'), header=None)
         self.dloc = dloc
         self.img_transform = img_transform
         self.txt_transform = txt_transform
@@ -28,7 +29,8 @@ class MMDataset(Dataset):
     def __getitem__(self, idx):
         fname = str(self.file_names.iloc[idx,0])
 
-        img = Image.open(os.path.join(self.dloc, 'images', fname+'.jpg')).convert('RGB')
+        # img = Image.open(os.path.join(self.dloc, 'images', fname+'.jpg')).convert('RGB')
+        img = Image.open(os.path.join(self.dloc, 'test_images', fname + '.jpg')).convert('RGB')
         text = open(os.path.join(self.dloc, 'texts', fname+'.txt'), 'r', encoding='utf-8', errors='ignore').read().strip().lower()
 
         if self.img_transform:
